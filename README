@@ -1,0 +1,45 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+# Check current directory and files
+print("Current directory:", os.getcwd())
+print("Files in current directory:", os.listdir())
+
+# Step 1: Load the dataset
+df = pd.read_csv('combined_ghg_data.csv')  # ✅ Make sure this file exists in the path
+
+# Step 2: Drop unnecessary columns
+df.drop(columns=['Name', 'Code', 'Year'], inplace=True)
+
+# Step 3: Define features and target
+X = df.drop(columns=['Supply Chain Emission Factors with Margins'])  # Feature set
+y = df['Supply Chain Emission Factors with Margins']  # Target
+
+# Step 4: Univariate analysis
+plt.figure(figsize=(6, 3))
+sns.countplot(x=df["Substance"])
+plt.title("Count Plot: Substance")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(6, 3))
+sns.countplot(x=df["Unit"])
+plt.title("Count Plot: Unit")
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(6, 3))
+sns.countplot(x=df["Source"])
+plt.title("Count Plot: Source (Industry vs Commodity)")
+plt.tight_layout()
+plt.show()
+
+# Step 5: Correlation heatmap (Multivariate analysis)
+plt.figure(figsize=(12, 8))
+sns.heatmap(df.select_dtypes(include=np.number).corr(), annot=True, cmap="coolwarm")
+plt.title("Correlation Heatmap")
+plt.tight_layout()
+plt.show()
